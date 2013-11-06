@@ -4,7 +4,7 @@
     <list default="true" readonly="true" id="4dddb735-8945-403b-b4c4-03f6ebc944ca" name="Default" comment="" />
     <ignored path="java-cgdk.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383635867498" ignored="false" />
+    <file path="/fragment.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383740373461" ignored="false" />
     <file path="/a.dummy" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1380176295315" ignored="false" />
     <file path="/Game.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376296036257" ignored="false" />
     <file path="$USER_HOME$/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/Game.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376296073963" ignored="false" />
@@ -15,7 +15,7 @@
     <file path="/Effect.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376035285291" ignored="false" />
     <file path="$USER_HOME$/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/Effect.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376035285291" ignored="false" />
     <file path="/Strategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376038029486" ignored="false" />
-    <file path="/MyStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383664661723" ignored="false" />
+    <file path="/MyStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383741798806" ignored="false" />
     <file path="/ActionType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376036870868" ignored="false" />
     <file path="$USER_HOME$/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/ActionType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376045034585" ignored="false" />
     <file path="/BonusType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376037038832" ignored="false" />
@@ -283,8 +283,8 @@
     <file path="/DashboardTracker.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383645743093" ignored="false" />
     <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/model/gcm/DialogData.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383652877560" ignored="false" />
     <file path="/DialogData.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383652855882" ignored="false" />
-    <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/view/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383656299198" ignored="false" />
-    <file path="/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383656256939" ignored="false" />
+    <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/view/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383725373343" ignored="false" />
+    <file path="/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383725367140" ignored="false" />
     <file path="$PROJECT_DIR$/../DashboardSDK/res/values/styles.xml" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383653187191" ignored="false" />
     <file path="/styles.xml" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383653179326" ignored="false" />
     <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/view/BannerView.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383657045286" ignored="false" />
@@ -292,6 +292,8 @@
     <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/model/gcm/BannerData.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383657409267" ignored="false" />
     <file path="/BannerData.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383657358887" ignored="false" />
     <file path="/BannerView.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383656926387" ignored="false" />
+    <file path="$PROJECT_DIR$/../DashboardSDK/project.properties" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383666260357" ignored="false" />
+    <file path="/project.properties" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383666230840" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,7 +308,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -343,6 +344,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -355,7 +357,18 @@
       <file leaf-file-name="MyStrategy.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/MyStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="52" selection-start="991" selection-end="991" vertical-scroll-proportion="0.5771144">
+            <state line="95" column="128" selection-start="3951" selection-end="3951" vertical-scroll-proportion="0.8770492">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Runner.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Runner.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="23" column="62" selection-start="667" selection-end="667" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -393,10 +406,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="199" />
-    <option name="y" value="50" />
-    <option name="width" value="1536" />
-    <option name="height" value="948" />
+    <option name="x" value="-1" />
+    <option name="y" value="26" />
+    <option name="width" value="1922" />
+    <option name="height" value="1029" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -436,7 +449,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -471,18 +483,19 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RunManager" selected="Application.Runner">
     <configuration default="false" name="Runner" type="Application" factoryName="Application" temporary="true">
@@ -522,6 +535,19 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -548,19 +574,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -661,25 +674,25 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="199" y="50" width="1536" height="948" extended-state="1" />
-    <editor active="true" />
+    <frame x="-1" y="26" width="1922" height="1029" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33684212" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5503433" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942554" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32902467" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32837528" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3282532" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Jenkins" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20766129" sideWeight="0.7931904" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20680958" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16488793" sideWeight="0.7276888" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2723112" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -758,13 +771,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/ActionType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="50" selection-start="5323" selection-end="5323" vertical-scroll-proportion="2.7567568">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/model/BonusType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="16" selection-start="1007" selection-end="1019" vertical-scroll-proportion="0.6529161">
@@ -793,13 +799,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Unit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="9" selection-start="172" selection-end="177" vertical-scroll-proportion="0.065296255">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/model/World.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="19" selection-start="261" selection-end="261" vertical-scroll-proportion="0.14424242">
@@ -816,25 +815,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Runner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="19" selection-start="137" selection-end="137" vertical-scroll-proportion="0.09770808">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/model/Player.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="41" column="76" selection-start="1003" selection-end="1003" vertical-scroll-proportion="0.7400722">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Trooper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="61" selection-start="2382" selection-end="2382" vertical-scroll-proportion="1.2454873">
           <folding />
         </state>
       </provider>
@@ -867,9 +850,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar:///opt/java-oracle/jdk1.7.0/src.zip!/java/lang/Enum.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="166" column="45" selection-start="4979" selection-end="4985" vertical-scroll-proportion="0.2835821">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/Trooper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="38" selection-start="127" selection-end="127" vertical-scroll-proportion="-2.4311476">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/Unit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="22" selection-start="161" selection-end="161" vertical-scroll-proportion="0.17213115">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Runner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="62" selection-start="667" selection-end="667" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/MyStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="52" selection-start="991" selection-end="991" vertical-scroll-proportion="0.5771144">
+        <state line="95" column="128" selection-start="3951" selection-end="3951" vertical-scroll-proportion="0.8770492">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
