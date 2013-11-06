@@ -19,24 +19,27 @@ public final class MyStrategy implements Strategy {
 
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
-        if (self.getActionPoints() < game.getStandingMoveCost()) {
+//        if (self.getActionPoints() < game.getStandingMoveCost()) {
+//            return;
+//        }
+        if (self.getActionPoints() == 2) {
+
             return;
         }
 
-        if (atackX != -1 && atackY != -1) {
-            Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
-            if (attackTrooper != null &&
-                    world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                            attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
-                move.setAction(ActionType.SHOOT);
-                move.setX(attackTrooper.getX());
-                move.setY(attackTrooper.getY());
-                return;
-            }
-        }
         soldier = null;
         commander = null;
         medic = null;
+
+        Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
+        if (attackTrooper != null &&
+                world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                        attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
+            move.setAction(ActionType.SHOOT);
+            move.setX(attackTrooper.getX());
+            move.setY(attackTrooper.getY());
+            return;
+        }
 
         for (Trooper trooper : world.getTroopers()) {
             if (!trooper.isTeammate()) {
@@ -61,46 +64,44 @@ public final class MyStrategy implements Strategy {
                 }
             }
         }
-        atackX = -1;
-        atackY = -1;
 
-        if (move.getAction() == ActionType.END_TURN) {
-            if (self.getType() == TrooperType.COMMANDER) {
-                commanderStategy(self, world, move);
-            } else if (self.getType() == TrooperType.FIELD_MEDIC) {
-                // 2/3
-                if (self.getHitpoints() * 3 < self.getMaximalHitpoints() * 2) {
+        if (self.getType() == TrooperType.COMMANDER) {
+            commanderStategy(self, world, move);
+        } else if (self.getType() == TrooperType.FIELD_MEDIC) {
+            // 2/3
+            if (self.getHitpoints() * 3 < self.getMaximalHitpoints() * 2) {
+                move.setAction(ActionType.HEAL);
+                move.setX(self.getX());
+                move.setY(self.getY());
+            } else if (commander != null && commander.getHitpoints() * 3 < commander.getMaximalHitpoints() * 2) {
+                if (Math.abs(self.getX() - commander.getX()) + Math.abs(self.getY() - commander.getY()) == 1) {
                     move.setAction(ActionType.HEAL);
-                    move.setX(self.getX());
-                    move.setY(self.getY());
-                } else if (commander != null && commander.getHitpoints() * 3 < commander.getMaximalHitpoints() * 2) {
-                    if (Math.abs(self.getX() - commander.getX()) + Math.abs(self.getY() - commander.getY()) == 1) {
-                        move.setAction(ActionType.HEAL);
-                        move.setX(commander.getX());
-                        move.setY(commander.getY());
-                    } else {
-                        moveToUnit(self, commander, move, world);
-                    }
-                } else if (soldier != null && soldier.getHitpoints() * 3 < soldier.getMaximalHitpoints() * 2) {
-                    if (Math.abs(self.getX() - soldier.getX()) + Math.abs(self.getY() - soldier.getY()) == 1) {
-                        move.setAction(ActionType.HEAL);
-                        move.setX(soldier.getX());
-                        move.setY(soldier.getY());
-                    } else if (soldier != null) {
-                        moveToUnit(self, soldier, move, world);
-                    }
-                } else if (commander != null) {
-                    moveToUnit(self, commander, move, world);
+                    move.setX(commander.getX());
+                    move.setY(commander.getY());
                 } else {
-                    commanderStategy(self, world, move);
-                }
-            } else if (self.getType() == TrooperType.SOLDIER) {
-                if (commander != null) {
-                    move.setAction(ActionType.MOVE);
                     moveToUnit(self, commander, move, world);
-                } else {
-                    commanderStategy(self, world, move);
                 }
+            } else if (soldier != null && soldier.getHitpoints() * 3 < soldier.getMaximalHitpoints() * 2) {
+                if (Math.abs(self.getX() - soldier.getX()) + Math.abs(self.getY() - soldier.getY()) == 1) {
+                    move.setAction(ActionType.HEAL);
+                    move.setX(soldier.getX());
+                    move.setY(soldier.getY());
+                } else {
+                    moveToUnit(self, soldier, move, world);
+                }
+            } else if (commander != null) {
+                moveToUnit(self, commander, move, world);
+            } else if (soldier != null) {
+                moveToUnit(self, soldier, move, world);
+            } else {
+                commanderStategy(self, world, move);
+            }
+        } else if (self.getType() == TrooperType.SOLDIER) {
+            if (commander != null) {
+                move.setAction(ActionType.MOVE);
+                moveToUnit(self, commander, move, world);
+            } else {
+                commanderStategy(self, world, move);
             }
         }
     }
@@ -125,7 +126,7 @@ public final class MyStrategy implements Strategy {
 
 
     private void commanderStategy(Trooper self, World world, Move move) {
-        if (self.getActionPoints() > 4) {
+        if (self.getActionPoints() > 6) {
             if (target == null || (self.getX() == target.getX() && self.getY() == target.getY())) {
                 target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
             }

@@ -15,7 +15,7 @@
     <file path="/Effect.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376035285291" ignored="false" />
     <file path="$USER_HOME$/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/Effect.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376035285291" ignored="false" />
     <file path="/Strategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376038029486" ignored="false" />
-    <file path="/MyStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383741798806" ignored="false" />
+    <file path="/MyStrategy.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383747414864" ignored="false" />
     <file path="/ActionType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376036870868" ignored="false" />
     <file path="$USER_HOME$/gameserver/src/main/java/com/codegame/gameserver/impl/codetroopers2013/model/ActionType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376045034585" ignored="false" />
     <file path="/BonusType.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1376037038832" ignored="false" />
@@ -283,8 +283,8 @@
     <file path="/DashboardTracker.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383645743093" ignored="false" />
     <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/model/gcm/DialogData.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383652877560" ignored="false" />
     <file path="/DialogData.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383652855882" ignored="false" />
-    <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/view/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383725373343" ignored="false" />
-    <file path="/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383725367140" ignored="false" />
+    <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/view/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383749245439" ignored="false" />
+    <file path="/NotificationDialog.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383749235118" ignored="false" />
     <file path="$PROJECT_DIR$/../DashboardSDK/res/values/styles.xml" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383653187191" ignored="false" />
     <file path="/styles.xml" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383653179326" ignored="false" />
     <file path="$PROJECT_DIR$/../DashboardSDK/src/com/oysterlabs/dashboard/view/BannerView.java" changelist="4dddb735-8945-403b-b4c4-03f6ebc944ca" time="1383657045286" ignored="false" />
@@ -345,6 +345,38 @@
       </breakpoint>
     </breakpoint_any>
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <line_breakpoints>
+      <breakpoint url="file://$PROJECT_DIR$/src/main/java/MyStrategy.java" line="103" class="MyStrategy" package="">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/main/java/MyStrategy.java" line="96" class="MyStrategy" package="">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -357,7 +389,7 @@
       <file leaf-file-name="MyStrategy.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/MyStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="95" column="128" selection-start="3951" selection-end="3951" vertical-scroll-proportion="0.8770492">
+            <state line="140" column="202" selection-start="5224" selection-end="5224" vertical-scroll-proportion="0.6188341">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -675,13 +707,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="26" width="1922" height="1029" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5503433" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2048055" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942554" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -691,8 +723,8 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Jenkins" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16488793" sideWeight="0.7276888" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2723112" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16488793" sideWeight="0.7951945" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2723112" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -882,7 +914,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/MyStrategy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="128" selection-start="3951" selection-end="3951" vertical-scroll-proportion="0.8770492">
+        <state line="140" column="202" selection-start="5224" selection-end="5224" vertical-scroll-proportion="0.6188341">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
