@@ -19,90 +19,106 @@ public final class MyStrategy implements Strategy {
 
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
-//        if (self.getActionPoints() < game.getStandingMoveCost()) {
-//            return;
-//        }
-        if (self.getActionPoints() == 2) {
-
+        System.out.println("Move Index =" + world.getMoveIndex());
+        if (self.getActionPoints() < game.getStandingMoveCost()) {
             return;
         }
 
-        soldier = null;
-        commander = null;
-        medic = null;
+        try {
+            if (self.getActionPoints() == 2) {
+                return;
+            }
 
-        Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
-        if (attackTrooper != null &&
-                world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                        attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
-            move.setAction(ActionType.SHOOT);
-            move.setX(attackTrooper.getX());
-            move.setY(attackTrooper.getY());
-            return;
-        }
+            soldier = null;
+            commander = null;
+            medic = null;
 
-        for (Trooper trooper : world.getTroopers()) {
-            if (!trooper.isTeammate()) {
-                if (world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                        trooper.getX(), trooper.getY(), trooper.getStance())) {
-                    move.setAction(ActionType.SHOOT);
-                    move.setX(atackX = trooper.getX());
-                    move.setY(atackY = trooper.getY());
-                    return;
-                }
-            } else {
-                switch (trooper.getType()) {
-                    case SOLDIER:
-                        soldier = trooper;
-                        break;
-                    case COMMANDER:
-                        commander = trooper;
-                        break;
-                    case FIELD_MEDIC:
-                        medic = trooper;
-                        break;
+            Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
+            if (attackTrooper != null &&
+                    world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                            attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
+                move.setAction(ActionType.SHOOT);
+                move.setX(attackTrooper.getX());
+                move.setY(attackTrooper.getY());
+                return;
+            }
+
+            for (Trooper trooper : world.getTroopers()) {
+                if (!trooper.isTeammate()) {
+                    if (world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                            trooper.getX(), trooper.getY(), trooper.getStance())) {
+                        move.setAction(ActionType.SHOOT);
+                        move.setX(atackX = trooper.getX());
+                        move.setY(atackY = trooper.getY());
+                        return;
+                    }
+                } else {
+                    switch (trooper.getType()) {
+                        case SOLDIER:
+                            soldier = trooper;
+                            break;
+                        case COMMANDER:
+                            commander = trooper;
+                            break;
+                        case FIELD_MEDIC:
+                            medic = trooper;
+                            break;
+                    }
                 }
             }
-        }
 
-        if (self.getType() == TrooperType.COMMANDER) {
-            commanderStategy(self, world, move);
-        } else if (self.getType() == TrooperType.FIELD_MEDIC) {
-            // 2/3
-            if (self.getHitpoints() * 3 < self.getMaximalHitpoints() * 2) {
+            if (self.getType() == TrooperType.COMMANDER) {
+                commanderStrategy(self, world, move);
+            } else if (self.getType() == TrooperType.FIELD_MEDIC) {
+                medicStrategy(self, world, move);
+            } else if (self.getType() == TrooperType.SOLDIER) {
+                soldierStrategy(self, world, move);
+            }
+        } catch (Throwable throwable) {
+            System.out.println("Strategy crashed");
+            throwable.printStackTrace();
+        } finally {
+            System.out.println("move: type=" + self.getType() + " action=" + move.getAction() + " x;y=(" + move.getX() + " " + move.getY() + ")");
+        }
+    }
+
+    private void soldierStrategy(Trooper self, World world, Move move) {
+        if (commander != null) {
+            move.setAction(ActionType.MOVE);
+            moveToUnit(self, commander, move, world);
+        } else {
+            commanderStrategy(self, world, move);
+        }
+    }
+
+    private void medicStrategy(Trooper self, World world, Move move) {
+        // 2/3
+        if (self.getHitpoints() * 3 < self.getMaximalHitpoints() * 2) {
+            move.setAction(ActionType.HEAL);
+            move.setX(self.getX());
+            move.setY(self.getY());
+        } else if (commander != null && commander.getHitpoints() * 3 < commander.getMaximalHitpoints() * 2) {
+            if (Math.abs(self.getX() - commander.getX()) + Math.abs(self.getY() - commander.getY()) == 1) {
                 move.setAction(ActionType.HEAL);
-                move.setX(self.getX());
-                move.setY(self.getY());
-            } else if (commander != null && commander.getHitpoints() * 3 < commander.getMaximalHitpoints() * 2) {
-                if (Math.abs(self.getX() - commander.getX()) + Math.abs(self.getY() - commander.getY()) == 1) {
-                    move.setAction(ActionType.HEAL);
-                    move.setX(commander.getX());
-                    move.setY(commander.getY());
-                } else {
-                    moveToUnit(self, commander, move, world);
-                }
-            } else if (soldier != null && soldier.getHitpoints() * 3 < soldier.getMaximalHitpoints() * 2) {
-                if (Math.abs(self.getX() - soldier.getX()) + Math.abs(self.getY() - soldier.getY()) == 1) {
-                    move.setAction(ActionType.HEAL);
-                    move.setX(soldier.getX());
-                    move.setY(soldier.getY());
-                } else {
-                    moveToUnit(self, soldier, move, world);
-                }
-            } else if (commander != null) {
+                move.setX(commander.getX());
+                move.setY(commander.getY());
+            } else {
                 moveToUnit(self, commander, move, world);
-            } else if (soldier != null) {
+            }
+        } else if (soldier != null && soldier.getHitpoints() * 3 < soldier.getMaximalHitpoints() * 2) {
+            if (Math.abs(self.getX() - soldier.getX()) + Math.abs(self.getY() - soldier.getY()) == 1) {
+                move.setAction(ActionType.HEAL);
+                move.setX(soldier.getX());
+                move.setY(soldier.getY());
+            } else {
                 moveToUnit(self, soldier, move, world);
-            } else {
-                commanderStategy(self, world, move);
             }
-        } else if (self.getType() == TrooperType.SOLDIER) {
-            if (commander != null) {
-                move.setAction(ActionType.MOVE);
-                moveToUnit(self, commander, move, world);
-            } else {
-                commanderStategy(self, world, move);
-            }
+        } else if (commander != null) {
+            moveToUnit(self, commander, move, world);
+        } else if (soldier != null) {
+            moveToUnit(self, soldier, move, world);
+        } else {
+            commanderStrategy(self, world, move);
         }
     }
 
@@ -125,31 +141,65 @@ public final class MyStrategy implements Strategy {
     }
 
 
-    private void commanderStategy(Trooper self, World world, Move move) {
+    private void commanderStrategy(Trooper self, World world, Move move) {
         if (self.getActionPoints() > 6) {
             if (target == null || (self.getX() == target.getX() && self.getY() == target.getY())) {
                 target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
             }
             move.setAction(ActionType.MOVE);
             Point p = findPath(self.getX(), self.getY(), target.getX(), target.getY(), world);
-            move.setX(p.getX());
-            move.setY(p.getY());
+            if (p != null) {
+                move.setX(p.getX());
+                move.setY(p.getY());
+//                System.out.println("commander move to:" + p.getX() + " ; " + p.getY());
+            } else {
+                move.setAction(ActionType.END_TURN);
+            }
         } else {
             move.setAction(ActionType.END_TURN);
+//            System.out.println("end turn");
         }
     }
 
 
     void moveToUnit(Trooper self, Trooper trooper, Move move, World world) {
         move.setAction(ActionType.MOVE);
-        Point nextpoint = findPath(self.getX(), self.getY(), trooper.getX(), trooper.getY(), world);
-        move.setX(nextpoint.getX());
-        move.setY(nextpoint.getY());
+        Point nextPoint = findPath(self.getX(), self.getY(), trooper.getX(), trooper.getY(), world, false);
+        if (nextPoint != null
+                && nextPoint.getX() != trooper.getX()
+                && nextPoint.getY() != trooper.getY()) {
+            move.setX(nextPoint.getX());
+            move.setY(nextPoint.getY());
+            System.out.println("move to: (" + nextPoint.getX() + " ; " + nextPoint.getY() + ") "
+                    + "current=(" + self.getX() + ";" + self.getY() + ")"
+                    + " step able=" + world.getCells()[nextPoint.getX()][nextPoint.getY()]);
+        } else {
+            move.setAction(ActionType.END_TURN);
+        }
     }
 
-    public Point findPath(int x1, int y1, int x2, int y2, World world) {
-        Point[] path = new PathFinder(world.getCells()).find(new Point(x1, y1), new Point(x2, y2));
-        return path[1];
+    private Point findPath(int x1, int y1, int x2, int y2, World world) {
+        return findPath(x1, y1, x2, y2, world, true);
+    }
+
+    public Point findPath(int x1, int y1, int x2, int y2, World world, boolean isEndPointFree) {
+        CellType[][] cells = world.getCells().clone();
+        for (Trooper trooper : world.getTroopers()) {
+            if (trooper.getX() != x1 && trooper.getY() != y1
+                    && trooper.getX() != x2 && trooper.getY() != 2) {
+                cells[trooper.getX()][trooper.getY()] = CellType.HIGH_COVER;
+            }
+        }
+        Point[] path = new PathFinder(cells).find(new Point(x1, y1), new Point(x2, y2));
+        if (path != null
+                && (isEndPointFree ? path.length > 1 : path.length > 2)
+                && cells[path[1].getX()][path[1].getY()] == CellType.FREE) {
+            return path[1];
+        } else {
+//            System.out.println("find return null");
+            return null;
+        }
+
     }
 
     class Point {
