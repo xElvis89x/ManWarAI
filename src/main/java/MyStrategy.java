@@ -17,9 +17,13 @@ public final class MyStrategy implements Strategy {
 
     private static Point target;
 
+    private void sout(String s) {
+        System.out.println(s);
+    }
+
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
-        System.out.println("Move Index =" + world.getMoveIndex());
+        sout("Move Index =" + world.getMoveIndex());
         if (self.getActionPoints() < game.getStandingMoveCost()) {
             return;
         }
@@ -75,10 +79,14 @@ public final class MyStrategy implements Strategy {
                 soldierStrategy(self, world, move);
             }
         } catch (Throwable throwable) {
-            System.out.println("Strategy crashed");
+            sout("Strategy crashed");
             throwable.printStackTrace();
         } finally {
-            System.out.println("move: type=" + self.getType() + " action=" + move.getAction() + " x;y=(" + move.getX() + " " + move.getY() + ")");
+            sout("self = (" + self.getX() + ";" + self.getY() + "); type =" + self.getType());
+            sout("move: action=" + move.getAction() + " x;y=(" + move.getX() + " " + move.getY() + ")");
+            if (target != null) {
+                sout("target = (" + target.getX() + ";" + target.getY() + ");");
+            }
         }
     }
 
@@ -143,34 +151,83 @@ public final class MyStrategy implements Strategy {
 
     private void commanderStrategy(Trooper self, World world, Move move) {
         if (self.getActionPoints() > 6) {
-            if (target == null || (self.getX() == target.getX() && self.getY() == target.getY())) {
-                target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
-            }
-            move.setAction(ActionType.MOVE);
-            Point p = findPath(self.getX(), self.getY(), target.getX(), target.getY(), world);
-            if (p != null) {
-                move.setX(p.getX());
-                move.setY(p.getY());
-//                System.out.println("commander move to:" + p.getX() + " ; " + p.getY());
+            if ((medic == null && soldier == null)
+                    || ((medic != null && self.getDistanceTo(medic) < 4)
+                    || (soldier != null && self.getDistanceTo(soldier) < 4))) {
+                defineTarget(self, world);
+                move.setAction(ActionType.MOVE);
+                Point p = findPath(self.getX(), self.getY(), target.getX(), target.getY(), world);
+                if (p != null) {
+                    move.setX(p.getX());
+                    move.setY(p.getY());
+                } else {
+                    move.setAction(ActionType.END_TURN);
+                }
             } else {
-                move.setAction(ActionType.END_TURN);
             }
         } else {
             move.setAction(ActionType.END_TURN);
-//            System.out.println("end turn");
         }
+    }
+
+    /**
+     * определить цель команды(куда идти если никого рядом не видно)
+     *
+     * @param self
+     * @param world
+     */
+    private void defineTarget(Trooper self, World world) {
+        if (target == null || isTargetComplete(self)) {
+            target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
+            int dx, dy;
+            Point tmp = target;
+            int step = 0;
+            while (!checkPointFree(tmp, world, world.getCells())) {
+                dx = (int) Math.sin(Math.toRadians(step)) * (step / 360);
+                dy = (int) Math.cos(Math.toRadians(step)) * (step / 360);
+                step += 90;
+                tmp = new Point(target.getX() + dx, target.getY() + dy);
+            }
+            target = tmp;
+
+        }
+    }
+
+    private Point findFreeCell(Point p, CellType[][] cellTypes, World world) {
+        Point tmp = p;
+        int dx, dy;
+        int step = 0;
+        while (!checkPointFree(tmp, world, cellTypes)) {
+            dx = (int) Math.sin(Math.toRadians(step)) * (step / 360);
+            dy = (int) Math.cos(Math.toRadians(step)) * (step / 360);
+            step += 90;
+            tmp = new Point(p.getX() + dx, p.getY() + dy);
+        }
+        return tmp;
+    }
+
+    private boolean checkPointFree(Point point, World world, CellType[][] cells) {
+        if (point.getX() < 0 || point.getX() > world.getWidth() - 1) {
+            return false;
+        }
+        if (point.getY() < 0 || point.getY() > world.getHeight() - 1) {
+            return false;
+        }
+        return cells[point.getX()][point.getY()] == CellType.FREE;
+    }
+
+    private boolean isTargetComplete(Trooper self) {
+        return self.getX() == target.getX() && self.getY() == target.getY();
     }
 
 
     void moveToUnit(Trooper self, Trooper trooper, Move move, World world) {
         move.setAction(ActionType.MOVE);
-        Point nextPoint = findPath(self.getX(), self.getY(), trooper.getX(), trooper.getY(), world, false);
-        if (nextPoint != null
-                && nextPoint.getX() != trooper.getX()
-                && nextPoint.getY() != trooper.getY()) {
+        Point nextPoint = findPath(self.getX(), self.getY(), trooper.getX(), trooper.getY(), world);
+        if (nextPoint != null && nextPoint.getX() != trooper.getX() && nextPoint.getY() != trooper.getY()) {
             move.setX(nextPoint.getX());
             move.setY(nextPoint.getY());
-            System.out.println("move to: (" + nextPoint.getX() + " ; " + nextPoint.getY() + ") "
+            sout("move to: (" + nextPoint.getX() + " ; " + nextPoint.getY() + ") "
                     + "current=(" + self.getX() + ";" + self.getY() + ")"
                     + " step able=" + world.getCells()[nextPoint.getX()][nextPoint.getY()]);
         } else {
@@ -178,25 +235,18 @@ public final class MyStrategy implements Strategy {
         }
     }
 
-    private Point findPath(int x1, int y1, int x2, int y2, World world) {
-        return findPath(x1, y1, x2, y2, world, true);
-    }
 
-    public Point findPath(int x1, int y1, int x2, int y2, World world, boolean isEndPointFree) {
+    public Point findPath(int x1, int y1, int x2, int y2, World world) {
         CellType[][] cells = world.getCells().clone();
         for (Trooper trooper : world.getTroopers()) {
-            if (trooper.getX() != x1 && trooper.getY() != y1
-                    && trooper.getX() != x2 && trooper.getY() != 2) {
+            if (trooper.getX() != x1 && trooper.getY() != y1) {
                 cells[trooper.getX()][trooper.getY()] = CellType.HIGH_COVER;
             }
         }
-        Point[] path = new PathFinder(cells).find(new Point(x1, y1), new Point(x2, y2));
-        if (path != null
-                && (isEndPointFree ? path.length > 1 : path.length > 2)
-                && cells[path[1].getX()][path[1].getY()] == CellType.FREE) {
+        Point[] path = new PathFinder(cells).find(new Point(x1, y1), findFreeCell(new Point(x2, y2), cells, world));
+        if (path != null) {
             return path[1];
         } else {
-//            System.out.println("find return null");
             return null;
         }
 
