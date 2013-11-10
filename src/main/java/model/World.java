@@ -101,6 +101,8 @@ public final class World {
      * ({@code viewerX}, {@code viewerY}) в стойке {@code viewerStance}.
      * Может использоваться как для проверки видимости, так и для проверки возможности стрельбы.
      *
+     * При проверке видимости бонуса его высота считается равной высоте бойца в стойке {@code TrooperStance.PRONE}.
+     *
      * @param maxRange     Дальность обзора/стрельбы наблюдающего юнита ({@code viewer}).
      * @param viewerX      X-координата наблюдающего юнита ({@code viewer}).
      * @param viewerY      Y-координата наблюдающего юнита ({@code viewer}).

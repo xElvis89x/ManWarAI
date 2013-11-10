@@ -19,6 +19,9 @@ public final class Game {
     private final int commanderAuraBonusActionPoints;
     private final double commanderAuraRange;
 
+    private final int commanderRequestEnemyDispositionCost;
+    private final int commanderRequestEnemyDispositionMaxOffset;
+
     private final int fieldMedicHealCost;
     private final int fieldMedicHealBonusHitpoints;
     private final int fieldMedicHealSelfBonusHitpoints;
@@ -51,6 +54,7 @@ public final class Game {
             int trooperEliminationScore, double trooperDamageScoreFactor,
             int stanceChangeCost, int standingMoveCost, int kneelingMoveCost, int proneMoveCost,
             int commanderAuraBonusActionPoints, double commanderAuraRange,
+            int commanderRequestEnemyDispositionCost, int commanderRequestEnemyDispositionMaxOffset,
             int fieldMedicHealCost, int fieldMedicHealBonusHitpoints, int fieldMedicHealSelfBonusHitpoints,
             double sniperStandingStealthBonus, double sniperKneelingStealthBonus, double sniperProneStealthBonus,
             double sniperStandingShootingRangeBonus, double sniperKneelingShootingRangeBonus,
@@ -69,6 +73,8 @@ public final class Game {
         this.proneMoveCost = proneMoveCost;
         this.commanderAuraBonusActionPoints = commanderAuraBonusActionPoints;
         this.commanderAuraRange = commanderAuraRange;
+        this.commanderRequestEnemyDispositionCost = commanderRequestEnemyDispositionCost;
+        this.commanderRequestEnemyDispositionMaxOffset = commanderRequestEnemyDispositionMaxOffset;
         this.fieldMedicHealCost = fieldMedicHealCost;
         this.fieldMedicHealBonusHitpoints = fieldMedicHealBonusHitpoints;
         this.fieldMedicHealSelfBonusHitpoints = fieldMedicHealSelfBonusHitpoints;
@@ -183,6 +189,21 @@ public final class Game {
      */
     public double getCommanderAuraRange() {
         return commanderAuraRange;
+    }
+
+    /**
+     * @return Возвращает количество очков действия, необходимое командиру, для запроса в штаб.
+     */
+    public int getCommanderRequestEnemyDispositionCost() {
+        return commanderRequestEnemyDispositionCost;
+    }
+
+    /**
+     * @return Возвращает модуль максимально возможного отклонения каждой из координат расположения противника,
+     *         полученных в результате вызова самолёта-разведчика.
+     */
+    public int getCommanderRequestEnemyDispositionMaxOffset() {
+        return commanderRequestEnemyDispositionMaxOffset;
     }
 
     /**

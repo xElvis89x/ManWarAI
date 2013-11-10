@@ -20,7 +20,7 @@ public final class Trooper extends Unit {
     private final double visionRange;
     private final double shootingRange;
 
-    private final int shotCost;
+    private final int shootCost;
     private final int standingDamage;
     private final int kneelingDamage;
     private final int proneDamage;
@@ -34,7 +34,7 @@ public final class Trooper extends Unit {
             long id, int x, int y, long playerId,
             int teammateIndex, boolean teammate, TrooperType type, TrooperStance stance,
             int hitpoints, int maximalHitpoints, int actionPoints, int initialActionPoints,
-            double visionRange, double shootingRange, int shotCost,
+            double visionRange, double shootingRange, int shootCost,
             int standingDamage, int kneelingDamage, int proneDamage, int damage,
             boolean holdingGrenade, boolean holdingMedikit, boolean holdingFieldRation) {
         super(id, x, y);
@@ -49,7 +49,7 @@ public final class Trooper extends Unit {
         this.initialActionPoints = initialActionPoints;
         this.visionRange = visionRange;
         this.shootingRange = shootingRange;
-        this.shotCost = shotCost;
+        this.shootCost = shootCost;
         this.standingDamage = standingDamage;
         this.kneelingDamage = kneelingDamage;
         this.proneDamage = proneDamage;
@@ -139,8 +139,8 @@ public final class Trooper extends Unit {
     /**
      * @return Возвращает количество очков действия, необходимое бойцу для совершения выстрела.
      */
-    public int getShotCost() {
-        return shotCost;
+    public int getShootCost() {
+        return shootCost;
     }
 
     /**
@@ -162,6 +162,23 @@ public final class Trooper extends Unit {
      */
     public int getProneDamage() {
         return proneDamage;
+    }
+
+    /**
+     * @param stance Стойка бойца для подсчёта урона.
+     * @return Возвращает урон одного выстрела бойца в указанной стойке.
+     */
+    public int getDamage(TrooperStance stance) {
+        switch (stance) {
+            case PRONE:
+                return proneDamage;
+            case KNEELING:
+                return kneelingDamage;
+            case STANDING:
+                return standingDamage;
+            default:
+                throw new IllegalArgumentException("Unsupported stance: " + stance + '.');
+        }
     }
 
     /**

@@ -38,13 +38,16 @@ public final class MyStrategy implements Strategy {
             medic = null;
 
             Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
-            if (attackTrooper != null &&
+            if (attackTrooper != null && !attackTrooper.isTeammate() &&
                     world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
                             attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
                 move.setAction(ActionType.SHOOT);
                 move.setX(attackTrooper.getX());
                 move.setY(attackTrooper.getY());
                 return;
+            } else if (attackTrooper == null) {
+                atackX = -1;
+                atackY = -1;
             }
 
             for (Trooper trooper : world.getTroopers()) {
@@ -90,6 +93,27 @@ public final class MyStrategy implements Strategy {
         }
     }
 
+    /**
+     * определить цель команды(куда идти если никого рядом не видно)
+     *
+     * @param self
+     * @param world
+     */
+    private void defineTarget(Trooper self, World world) {
+        if (target == null || isTargetComplete(self)) {
+            target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
+            int dx, dy, step = 0;
+            Point tmp = target;
+            while (!checkPointFree(tmp, world, world.getCells())) {
+                dx = (int) Math.sin(Math.toRadians(step)) * (step / 360);
+                dy = (int) Math.cos(Math.toRadians(step)) * (step / 360);
+                step += 90;
+                tmp = new Point(target.getX() + dx, target.getY() + dy);
+            }
+            target = tmp;
+        }
+    }
+
     private void soldierStrategy(Trooper self, World world, Move move) {
         if (commander != null) {
             move.setAction(ActionType.MOVE);
@@ -101,32 +125,30 @@ public final class MyStrategy implements Strategy {
 
     private void medicStrategy(Trooper self, World world, Move move) {
         // 2/3
-        if (self.getHitpoints() * 3 < self.getMaximalHitpoints() * 2) {
+        if (self.getHitpoints() < self.getMaximalHitpoints() - 3) {
             move.setAction(ActionType.HEAL);
             move.setX(self.getX());
             move.setY(self.getY());
-        } else if (commander != null && commander.getHitpoints() * 3 < commander.getMaximalHitpoints() * 2) {
-            if (Math.abs(self.getX() - commander.getX()) + Math.abs(self.getY() - commander.getY()) == 1) {
-                move.setAction(ActionType.HEAL);
-                move.setX(commander.getX());
-                move.setY(commander.getY());
-            } else {
-                moveToUnit(self, commander, move, world);
-            }
-        } else if (soldier != null && soldier.getHitpoints() * 3 < soldier.getMaximalHitpoints() * 2) {
-            if (Math.abs(self.getX() - soldier.getX()) + Math.abs(self.getY() - soldier.getY()) == 1) {
-                move.setAction(ActionType.HEAL);
-                move.setX(soldier.getX());
-                move.setY(soldier.getY());
-            } else {
-                moveToUnit(self, soldier, move, world);
-            }
+        } else if (commander != null && commander.getHitpoints() < commander.getMaximalHitpoints() - 5) {
+            moveAndHeal(self, commander, world, move);
+        } else if (soldier != null && soldier.getHitpoints() < soldier.getMaximalHitpoints() - 5) {
+            moveAndHeal(self, soldier, world, move);
         } else if (commander != null) {
             moveToUnit(self, commander, move, world);
         } else if (soldier != null) {
             moveToUnit(self, soldier, move, world);
         } else {
             commanderStrategy(self, world, move);
+        }
+    }
+
+    private void moveAndHeal(Trooper self, Trooper healTarget, World world, Move move) {
+        if (Math.abs(self.getX() - healTarget.getX()) + Math.abs(self.getY() - healTarget.getY()) == 1) {
+            move.setAction(ActionType.HEAL);
+            move.setX(healTarget.getX());
+            move.setY(healTarget.getY());
+        } else {
+            moveToUnit(self, healTarget, move, world);
         }
     }
 
@@ -148,9 +170,19 @@ public final class MyStrategy implements Strategy {
         return null;
     }
 
+    CellType[][] getCells(World world, int x1, int y1) {
+        CellType[][] cells = world.getCells().clone();
+        for (Trooper trooper : world.getTroopers()) {
+            if (trooper.getX() != x1 || trooper.getY() != y1) {
+                cells[trooper.getX()][trooper.getY()] = CellType.HIGH_COVER;
+            }
+        }
+        return cells;
+    }
+
 
     private void commanderStrategy(Trooper self, World world, Move move) {
-        if (self.getActionPoints() > 6) {
+        if (self.getActionPoints() > 4) {
             if ((medic == null && soldier == null)
                     || ((medic != null && self.getDistanceTo(medic) < 4)
                     || (soldier != null && self.getDistanceTo(soldier) < 4))) {
@@ -166,51 +198,31 @@ public final class MyStrategy implements Strategy {
             } else {
             }
         } else {
-            move.setAction(ActionType.END_TURN);
-        }
-    }
-
-    /**
-     * определить цель команды(куда идти если никого рядом не видно)
-     *
-     * @param self
-     * @param world
-     */
-    private void defineTarget(Trooper self, World world) {
-        if (target == null || isTargetComplete(self)) {
-            target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
-            int dx, dy;
-            Point tmp = target;
-            int step = 0;
-            while (!checkPointFree(tmp, world, world.getCells())) {
-                dx = (int) Math.sin(Math.toRadians(step)) * (step / 360);
-                dy = (int) Math.cos(Math.toRadians(step)) * (step / 360);
-                step += 90;
-                tmp = new Point(target.getX() + dx, target.getY() + dy);
+            if (medic != null) {
+                moveToUnit(self, medic, move, world);
+            } else if (soldier != null) {
+                moveToUnit(self, soldier, move, world);
             }
-            target = tmp;
-
         }
     }
 
     private Point findFreeCell(Point p, CellType[][] cellTypes, World world) {
         Point tmp = p;
-        int dx, dy;
-        int step = 0;
+        int dx, dy, step = 0;
         while (!checkPointFree(tmp, world, cellTypes)) {
             dx = (int) Math.sin(Math.toRadians(step)) * (step / 360);
             dy = (int) Math.cos(Math.toRadians(step)) * (step / 360);
             step += 90;
             tmp = new Point(p.getX() + dx, p.getY() + dy);
         }
+
+        System.out.println("point = " + p.getX() + ";" + p.getY() + "  freePoint = " + tmp.getX() + ";" + tmp.getY());
         return tmp;
     }
 
     private boolean checkPointFree(Point point, World world, CellType[][] cells) {
-        if (point.getX() < 0 || point.getX() > world.getWidth() - 1) {
-            return false;
-        }
-        if (point.getY() < 0 || point.getY() > world.getHeight() - 1) {
+        if (point.getX() < 0 || point.getX() > world.getWidth() - 1
+                || point.getY() < 0 || point.getY() > world.getHeight() - 1) {
             return false;
         }
         return cells[point.getX()][point.getY()] == CellType.FREE;
@@ -237,19 +249,9 @@ public final class MyStrategy implements Strategy {
 
 
     public Point findPath(int x1, int y1, int x2, int y2, World world) {
-        CellType[][] cells = world.getCells().clone();
-        for (Trooper trooper : world.getTroopers()) {
-            if (trooper.getX() != x1 && trooper.getY() != y1) {
-                cells[trooper.getX()][trooper.getY()] = CellType.HIGH_COVER;
-            }
-        }
+        CellType[][] cells = getCells(world, x1, y1);
         Point[] path = new PathFinder(cells).find(new Point(x1, y1), findFreeCell(new Point(x2, y2), cells, world));
-        if (path != null) {
-            return path[1];
-        } else {
-            return null;
-        }
-
+        return path != null ? path[1] : null;
     }
 
     class Point {
@@ -279,7 +281,7 @@ public final class MyStrategy implements Strategy {
     class PathFinder {
         int[][] fillmap; // Pазмеp == pазмеpу лабиpинта !
         CellType[][] labyrinth;
-        List buf = new ArrayList();
+        List<Point> buf = new ArrayList<Point>();
 
         PathFinder(CellType[][] labyrinth) {
             this.labyrinth = labyrinth;
@@ -308,8 +310,9 @@ public final class MyStrategy implements Strategy {
             int tx = 0, ty = 0, n = 0, t = 0;
             Point p;
             // Вначале fillmap заполняется max значением
-            for (int i = 0; i < fillmap.length; i++)
-                Arrays.fill(fillmap[i], Integer.MAX_VALUE);
+            for (int[] aFillmap : fillmap) {
+                Arrays.fill(aFillmap, Integer.MAX_VALUE);
+            }
             push(start, 0); // Путь в начальную точку =0, логично ?
             while ((p = pop()) != null) { // Цикл, пока есть точки в буфеpе
                 // n=длина пути до любой соседней клетки
@@ -336,7 +339,7 @@ public final class MyStrategy implements Strategy {
                 return null;
             }
 
-            List path = new ArrayList();
+            List<Point> path = new ArrayList<Point>();
             path.add(end);
             int x = end.getX();
             int y = end.getY();
@@ -374,8 +377,11 @@ public final class MyStrategy implements Strategy {
             //Мы получили путь, только задом наперед, теперь нужно его перевернуть
             Point[] result = new Point[path.size()];
             t = path.size();
-            for (Object point : path)
-                result[--t] = (Point) point;
+            for (Point point : path) {
+                System.out.print(point.getX() + ";" + point.getY() + " - ");
+                result[--t] = point;
+            }
+            System.out.println();
             return result;
         }
 

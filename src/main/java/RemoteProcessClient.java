@@ -42,7 +42,7 @@ public final class RemoteProcessClient implements Closeable {
 
     public void writeProtocolVersion() throws IOException {
         writeEnum(MessageType.PROTOCOL_VERSION);
-        writeInt(1);
+        writeInt(2);
         flush();
     }
 
@@ -58,6 +58,7 @@ public final class RemoteProcessClient implements Closeable {
                 readInt(), readDouble(),
                 readInt(), readInt(), readInt(), readInt(),
                 readInt(), readDouble(),
+                readInt(), readInt(),
                 readInt(), readInt(), readInt(),
                 readDouble(), readDouble(), readDouble(),
                 readDouble(), readDouble(),
@@ -121,7 +122,9 @@ public final class RemoteProcessClient implements Closeable {
 
         for (int playerIndex = 0; playerIndex < playerCount; ++playerIndex) {
             if (readBoolean()) {
-                players[playerIndex] = new Player(readLong(), readString(), readInt(), readBoolean());
+                players[playerIndex] = new Player(
+                        readLong(), readString(), readInt(), readBoolean(), readInt(), readInt()
+                );
             }
         }
 
