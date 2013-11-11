@@ -23,6 +23,7 @@ public final class MyStrategy implements Strategy {
 
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
+        sout("=============================================================");
         sout("Move Index =" + world.getMoveIndex());
         if (self.getActionPoints() < game.getStandingMoveCost()) {
             return;
@@ -126,16 +127,21 @@ public final class MyStrategy implements Strategy {
     private void medicStrategy(Trooper self, World world, Move move) {
         // 2/3
         if (self.getHitpoints() < self.getMaximalHitpoints() - 3) {
+            sout("heal self");
             move.setAction(ActionType.HEAL);
             move.setX(self.getX());
             move.setY(self.getY());
         } else if (commander != null && commander.getHitpoints() < commander.getMaximalHitpoints() - 5) {
+            sout("heal commander");
             moveAndHeal(self, commander, world, move);
         } else if (soldier != null && soldier.getHitpoints() < soldier.getMaximalHitpoints() - 5) {
+            sout("heal soldier");
             moveAndHeal(self, soldier, world, move);
         } else if (commander != null) {
+            sout("go to commander");
             moveToUnit(self, commander, move, world);
         } else if (soldier != null) {
+            sout("go to soldier");
             moveToUnit(self, soldier, move, world);
         } else {
             commanderStrategy(self, world, move);
@@ -216,7 +222,7 @@ public final class MyStrategy implements Strategy {
             tmp = new Point(p.getX() + dx, p.getY() + dy);
         }
 
-        System.out.println("point = " + p.getX() + ";" + p.getY() + "  freePoint = " + tmp.getX() + ";" + tmp.getY());
+        sout("point = " + p.getX() + ";" + p.getY() + "  freePoint = " + tmp.getX() + ";" + tmp.getY());
         return tmp;
     }
 
@@ -234,15 +240,16 @@ public final class MyStrategy implements Strategy {
 
 
     void moveToUnit(Trooper self, Trooper trooper, Move move, World world) {
-        move.setAction(ActionType.MOVE);
         Point nextPoint = findPath(self.getX(), self.getY(), trooper.getX(), trooper.getY(), world);
-        if (nextPoint != null && nextPoint.getX() != trooper.getX() && nextPoint.getY() != trooper.getY()) {
+        if (self.getDistanceTo(trooper) > 1 && nextPoint != null && !(nextPoint.getX() == trooper.getX() && nextPoint.getY() == trooper.getY())) {
+            move.setAction(ActionType.MOVE);
             move.setX(nextPoint.getX());
             move.setY(nextPoint.getY());
             sout("move to: (" + nextPoint.getX() + " ; " + nextPoint.getY() + ") "
                     + "current=(" + self.getX() + ";" + self.getY() + ")"
                     + " step able=" + world.getCells()[nextPoint.getX()][nextPoint.getY()]);
         } else {
+            sout("moveToUnit END_TURN, trooper =" + trooper.getX() + ";" + trooper.getY() + " " + self.getActionPoints());
             move.setAction(ActionType.END_TURN);
         }
     }
@@ -251,7 +258,10 @@ public final class MyStrategy implements Strategy {
     public Point findPath(int x1, int y1, int x2, int y2, World world) {
         CellType[][] cells = getCells(world, x1, y1);
         Point[] path = new PathFinder(cells).find(new Point(x1, y1), findFreeCell(new Point(x2, y2), cells, world));
-        return path != null ? path[1] : null;
+        if (path == null || path.length < 2) {
+            return null;
+        }
+        return path[1];
     }
 
     class Point {
@@ -378,10 +388,10 @@ public final class MyStrategy implements Strategy {
             Point[] result = new Point[path.size()];
             t = path.size();
             for (Point point : path) {
-                System.out.print(point.getX() + ";" + point.getY() + " - ");
+//                System.out.print(point.getX() + ";" + point.getY() + " - ");
                 result[--t] = point;
             }
-            System.out.println();
+//            System.out.println();
             return result;
         }
 
