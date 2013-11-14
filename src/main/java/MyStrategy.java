@@ -38,13 +38,26 @@ public final class MyStrategy implements Strategy {
             commander = null;
             medic = null;
 
+
+            if (self.isHoldingMedikit() && self.getHitpoints() < self.getMaximalHitpoints() / 2) {
+                move.setAction(ActionType.HEAL);
+                move.setX(self.getX());
+                move.setY(self.getY());
+            }
+
             Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
             if (attackTrooper != null && !attackTrooper.isTeammate() &&
                     world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
                             attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
-                move.setAction(ActionType.SHOOT);
-                move.setX(attackTrooper.getX());
-                move.setY(attackTrooper.getY());
+                if (self.getActionPoints() < 6 && self.isHoldingFieldRation()) {
+                    move.setAction(ActionType.EAT_FIELD_RATION);
+                    move.setX(self.getX());
+                    move.setY(self.getY());
+                } else {
+                    move.setAction(ActionType.SHOOT);
+                    move.setX(attackTrooper.getX());
+                    move.setY(attackTrooper.getY());
+                }
                 return;
             } else if (attackTrooper == null) {
                 atackX = -1;
@@ -126,6 +139,7 @@ public final class MyStrategy implements Strategy {
 
     private void medicStrategy(Trooper self, World world, Move move) {
         // 2/3
+
         if (self.getHitpoints() < self.getMaximalHitpoints() - 3) {
             sout("heal self");
             move.setAction(ActionType.HEAL);
@@ -146,6 +160,10 @@ public final class MyStrategy implements Strategy {
         } else {
             commanderStrategy(self, world, move);
         }
+    }
+
+    private Trooper getTrooperForHeal() {
+        return null;
     }
 
     private void moveAndHeal(Trooper self, Trooper healTarget, World world, Move move) {
