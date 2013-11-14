@@ -1,9 +1,6 @@
 import model.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public final class MyStrategy implements Strategy {
     private final Random random = new Random();
@@ -46,6 +43,8 @@ public final class MyStrategy implements Strategy {
             }
 
             Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
+
+
             if (attackTrooper != null && !attackTrooper.isTeammate() &&
                     world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
                             attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
@@ -64,14 +63,17 @@ public final class MyStrategy implements Strategy {
                 atackY = -1;
             }
 
+
+            List<Trooper> troopersForAttack = new ArrayList<Trooper>();
+            List<Trooper> troopersSee = new ArrayList<Trooper>();
+
             for (Trooper trooper : world.getTroopers()) {
+
                 if (!trooper.isTeammate()) {
+                    troopersSee.add(trooper);
                     if (world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
                             trooper.getX(), trooper.getY(), trooper.getStance())) {
-                        move.setAction(ActionType.SHOOT);
-                        move.setX(atackX = trooper.getX());
-                        move.setY(atackY = trooper.getY());
-                        return;
+                        troopersForAttack.add(trooper);
                     }
                 } else {
                     switch (trooper.getType()) {
@@ -86,6 +88,19 @@ public final class MyStrategy implements Strategy {
                             break;
                     }
                 }
+            }
+            if (troopersForAttack.size() > 0) {
+                Collections.sort(troopersForAttack, new Comparator<Trooper>() {
+                    @Override
+                    public int compare(Trooper o1, Trooper o2) {
+                        return o1.getActionPoints() - o2.getActionPoints();
+                    }
+                });
+
+                shootTrooper(troopersForAttack.get(0), move);
+                atackX = move.getX();
+                atackY = move.getY();
+                return;
             }
 
             if (self.getType() == TrooperType.COMMANDER) {
@@ -105,6 +120,12 @@ public final class MyStrategy implements Strategy {
                 sout("target = (" + target.getX() + ";" + target.getY() + ");");
             }
         }
+    }
+
+    private void shootTrooper(Trooper trooper, Move move) {
+        move.setAction(ActionType.SHOOT);
+        move.setX(trooper.getX());
+        move.setY(trooper.getY());
     }
 
     /**
