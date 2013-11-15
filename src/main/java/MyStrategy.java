@@ -36,10 +36,11 @@ public final class MyStrategy implements Strategy {
             medic = null;
 
 
-            if (self.isHoldingMedikit() && self.getHitpoints() < self.getMaximalHitpoints() / 2) {
-                move.setAction(ActionType.HEAL);
+            if (self.isHoldingMedikit() && self.getHitpoints() < self.getMaximalHitpoints() / 3) {
+                move.setAction(ActionType.USE_MEDIKIT);
                 move.setX(self.getX());
                 move.setY(self.getY());
+                return;
             }
 
             Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
@@ -114,7 +115,7 @@ public final class MyStrategy implements Strategy {
             sout("Strategy crashed");
             throwable.printStackTrace();
         } finally {
-            sout("self = (" + self.getX() + ";" + self.getY() + "); type =" + self.getType());
+            sout("self = (" + self.getX() + ";" + self.getY() + "); type =" + self.getType() + " action_points = " + self.getActionPoints());
             sout("move: action=" + move.getAction() + " x;y=(" + move.getX() + " " + move.getY() + ")");
             if (target != null) {
                 sout("target = (" + target.getX() + ";" + target.getY() + ");");
