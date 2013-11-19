@@ -137,7 +137,11 @@ public final class MyStrategy implements Strategy {
      */
     private void defineTarget(Trooper self, World world) {
         if (target == null || isTargetComplete(self)) {
-            target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
+            if (self.getY() < world.getHeight() / 2) {
+                target = new Point(self.getX(), world.getHeight() - self.getY());
+            } else {
+                target = new Point(world.getWidth() - self.getX(), world.getHeight() - self.getY());
+            }
             int dx, dy, step = 0;
             Point tmp = target;
             while (!checkPointFree(tmp, world, world.getCells())) {
@@ -190,9 +194,15 @@ public final class MyStrategy implements Strategy {
 
     private void moveAndHeal(Trooper self, Trooper healTarget, World world, Move move) {
         if (Math.abs(self.getX() - healTarget.getX()) + Math.abs(self.getY() - healTarget.getY()) == 1) {
-            move.setAction(ActionType.HEAL);
+            if (healTarget.getHitpoints() < healTarget.getHitpoints() / 2
+                    && self.isHoldingMedikit()) {
+                move.setAction(ActionType.USE_MEDIKIT);
+            } else {
+                move.setAction(ActionType.HEAL);
+            }
             move.setX(healTarget.getX());
             move.setY(healTarget.getY());
+
         } else {
             moveToUnit(self, healTarget, move, world);
         }
@@ -266,6 +276,30 @@ public final class MyStrategy implements Strategy {
         return tmp;
     }
 
+    private Point findNearestFreeCellPath(World world, int x1, int y1, int x2, int y2) {
+        CellType[][] cells = getCells(world, x1, y1);
+        Point tmp = new Point(x2, y2);
+        int dx, dy, step = 0;
+        Point[] minPath = null;
+        while (minPath == null) {
+            for (int i = 0; i < 4; i++) {
+                if (checkPointFree(tmp, world, cells)) {
+                    Point[] path = new PathFinder(cells).find(new Point(x1, y1), tmp);
+                    if (path != null && path.length > 1) {
+                        if (minPath == null || minPath.length > path.length) {
+                            minPath = path;
+                        }
+                    }
+                }
+                dx = (int) Math.sin(Math.toRadians(step)) * (step / 360);
+                dy = (int) Math.cos(Math.toRadians(step)) * (step / 360);
+                step += 90;
+                tmp = new Point(x2 + dx, y2 + dy);
+            }
+        }
+        return minPath.length > 1 ? minPath[1] : null;
+    }
+
     private boolean checkPointFree(Point point, World world, CellType[][] cells) {
         if (point.getX() < 0 || point.getX() > world.getWidth() - 1
                 || point.getY() < 0 || point.getY() > world.getHeight() - 1) {
@@ -275,12 +309,12 @@ public final class MyStrategy implements Strategy {
     }
 
     private boolean isTargetComplete(Trooper self) {
-        return self.getX() == target.getX() && self.getY() == target.getY();
+        return Math.abs(self.getX() - target.getX()) + Math.abs(self.getY() - target.getY()) < 3;
     }
 
 
     void moveToUnit(Trooper self, Trooper trooper, Move move, World world) {
-        Point nextPoint = findPath(self.getX(), self.getY(), trooper.getX(), trooper.getY(), world);
+        Point nextPoint = findNearestFreeCellPath(world, self.getX(), self.getY(), trooper.getX(), trooper.getY());
         if (self.getDistanceTo(trooper) > 1 && nextPoint != null && !(nextPoint.getX() == trooper.getX() && nextPoint.getY() == trooper.getY())) {
             move.setAction(ActionType.MOVE);
             move.setX(nextPoint.getX());
