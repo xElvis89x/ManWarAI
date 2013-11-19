@@ -21,20 +21,41 @@ public final class MyStrategy implements Strategy {
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
         sout("=============================================================");
-        sout("Move Index =" + world.getMoveIndex());
-        if (self.getActionPoints() < game.getStandingMoveCost()) {
-            return;
-        }
-
+        sout("Move Index =" + world.getMoveIndex() + " Self Type=" + self.getType());
         try {
-            if (self.getActionPoints() == 2) {
-                return;
-            }
-
             soldier = null;
             commander = null;
             medic = null;
 
+            List<Trooper> troopersForAttack = new ArrayList<Trooper>();
+            List<Trooper> troopersSee = new ArrayList<Trooper>();
+
+            for (Trooper trooper : world.getTroopers()) {
+
+                if (!trooper.isTeammate()) {
+                    troopersSee.add(trooper);
+                    if (world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
+                            trooper.getX(), trooper.getY(), trooper.getStance())) {
+                        troopersForAttack.add(trooper);
+                    }
+                } else {
+                    switch (trooper.getType()) {
+                        case SOLDIER:
+                            soldier = trooper;
+                            break;
+                        case COMMANDER:
+                            commander = trooper;
+                            break;
+                        case FIELD_MEDIC:
+                            medic = trooper;
+                            break;
+                    }
+                }
+            }
+
+            if (self.getActionPoints() < game.getStandingMoveCost()) {
+                return;
+            }
 
             if (self.isHoldingMedikit() && self.getHitpoints() < self.getMaximalHitpoints() / 3) {
                 move.setAction(ActionType.USE_MEDIKIT);
@@ -64,32 +85,10 @@ public final class MyStrategy implements Strategy {
                 atackY = -1;
             }
 
-
-            List<Trooper> troopersForAttack = new ArrayList<Trooper>();
-            List<Trooper> troopersSee = new ArrayList<Trooper>();
-
-            for (Trooper trooper : world.getTroopers()) {
-
-                if (!trooper.isTeammate()) {
-                    troopersSee.add(trooper);
-                    if (world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                            trooper.getX(), trooper.getY(), trooper.getStance())) {
-                        troopersForAttack.add(trooper);
-                    }
-                } else {
-                    switch (trooper.getType()) {
-                        case SOLDIER:
-                            soldier = trooper;
-                            break;
-                        case COMMANDER:
-                            commander = trooper;
-                            break;
-                        case FIELD_MEDIC:
-                            medic = trooper;
-                            break;
-                    }
-                }
+            if (troopersSee.size() == 1 && troopersForAttack.size() == 0) {
+                moveToUnit(self, troopersSee.get(0), move, world);
             }
+
             if (troopersForAttack.size() > 0) {
                 Collections.sort(troopersForAttack, new Comparator<Trooper>() {
                     @Override
@@ -155,11 +154,12 @@ public final class MyStrategy implements Strategy {
     }
 
     private void soldierStrategy(Trooper self, World world, Move move) {
-        if (commander != null) {
-            move.setAction(ActionType.MOVE);
-            moveToUnit(self, commander, move, world);
-        } else {
+        if (commander == null) {
             commanderStrategy(self, world, move);
+        } else if (world.getTroopers().length == 3) {
+            commanderStrategy(self, world, move);
+        } else {
+            moveToUnit(self, commander, move, world);
         }
     }
 
@@ -238,10 +238,10 @@ public final class MyStrategy implements Strategy {
 
 
     private void commanderStrategy(Trooper self, World world, Move move) {
-        if (self.getActionPoints() > 4) {
+        if (self.getActionPoints() > 3) {
             if ((medic == null && soldier == null)
-                    || ((medic != null && self.getDistanceTo(medic) < 4)
-                    || (soldier != null && self.getDistanceTo(soldier) < 4))) {
+                    || ((medic != null && self.getDistanceTo(medic) < 5)
+                    || (soldier != null && self.getDistanceTo(soldier) < 5))) {
                 defineTarget(self, world);
                 move.setAction(ActionType.MOVE);
                 Point p = findPath(self.getX(), self.getY(), target.getX(), target.getY(), world);
