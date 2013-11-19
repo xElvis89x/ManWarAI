@@ -5,8 +5,7 @@ import java.util.*;
 public final class MyStrategy implements Strategy {
     private final Random random = new Random();
 
-    private static int atackX = -1;
-    private static int atackY = -1;
+    private static long trooperForAttackID = -1;
 
     private static Trooper medic;
     private static Trooper commander;
@@ -18,6 +17,9 @@ public final class MyStrategy implements Strategy {
         System.out.println(s);
     }
 
+    List<Trooper> enemiesShooting = new ArrayList<Trooper>();
+    List<Trooper> enemies = new ArrayList<Trooper>();
+
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
         sout("=============================================================");
@@ -27,16 +29,15 @@ public final class MyStrategy implements Strategy {
             commander = null;
             medic = null;
 
-            List<Trooper> troopersForAttack = new ArrayList<Trooper>();
-            List<Trooper> troopersSee = new ArrayList<Trooper>();
+
+            enemiesShooting.clear();
+            enemies.clear();
 
             for (Trooper trooper : world.getTroopers()) {
-
                 if (!trooper.isTeammate()) {
-                    troopersSee.add(trooper);
-                    if (world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                            trooper.getX(), trooper.getY(), trooper.getStance())) {
-                        troopersForAttack.add(trooper);
+                    enemies.add(trooper);
+                    if (isDamageable(world, self, trooper)) {
+                        enemiesShooting.add(trooper);
                     }
                 } else {
                     switch (trooper.getType()) {
@@ -64,43 +65,42 @@ public final class MyStrategy implements Strategy {
                 return;
             }
 
-            Trooper attackTrooper = findTrooperByXY(atackX, atackY, world);
+            Trooper attackTrooper = findTrooperById(trooperForAttackID, world);
 
-
-            if (attackTrooper != null && !attackTrooper.isTeammate() &&
-                    world.isVisible(self.getShootingRange(), self.getX(), self.getY(), self.getStance(),
-                            attackTrooper.getX(), attackTrooper.getY(), attackTrooper.getStance())) {
+            if (attackTrooper != null && !attackTrooper.isTeammate()
+                    && isDamageable(world, self, attackTrooper)) {
                 if (self.getActionPoints() < 6 && self.isHoldingFieldRation()) {
                     move.setAction(ActionType.EAT_FIELD_RATION);
                     move.setX(self.getX());
                     move.setY(self.getY());
+                } else if (self.getShootCost() < self.getActionPoints()) {
+                    shootTrooper(attackTrooper, move);
                 } else {
-                    move.setAction(ActionType.SHOOT);
-                    move.setX(attackTrooper.getX());
-                    move.setY(attackTrooper.getY());
+                    moveOut(self, attackTrooper, move);
                 }
                 return;
             } else if (attackTrooper == null) {
-                atackX = -1;
-                atackY = -1;
+                trooperForAttackID = -1;
             }
 
-            if (troopersSee.size() == 1 && troopersForAttack.size() == 0) {
-                moveToUnit(self, troopersSee.get(0), move, world);
+            if (enemies.size() == 1 && enemiesShooting.size() == 0) {
+                moveToUnit(self, enemies.get(0), move, world);
             }
 
-            if (troopersForAttack.size() > 0) {
-                Collections.sort(troopersForAttack, new Comparator<Trooper>() {
+            if (enemiesShooting.size() > 0) {
+                Collections.sort(enemiesShooting, new Comparator<Trooper>() {
                     @Override
                     public int compare(Trooper o1, Trooper o2) {
                         return o1.getActionPoints() - o2.getActionPoints();
                     }
                 });
-
-                shootTrooper(troopersForAttack.get(0), move);
-                atackX = move.getX();
-                atackY = move.getY();
-                return;
+                if (self.getActionPoints() > self.getShootCost()) {
+                    shootTrooper(enemiesShooting.get(0), move);
+                    trooperForAttackID = enemiesShooting.get(0).getId();
+                    return;
+                } else {
+                    moveOut(self, enemiesShooting.get(0), move);
+                }
             }
 
             if (self.getType() == TrooperType.COMMANDER) {
@@ -120,6 +120,26 @@ public final class MyStrategy implements Strategy {
                 sout("target = (" + target.getX() + ";" + target.getY() + ");");
             }
         }
+    }
+
+    private void moveOut(Trooper self, Trooper target, Move move) {
+        int x = target.getX() - self.getX();
+        int y = target.getY() - self.getY();
+
+        move.setAction(ActionType.MOVE);
+        if (Math.abs(x) > Math.abs(y)) {
+            move.setX(self.getX() - (int) Math.signum(x));
+            move.setY(self.getY());
+        } else {
+            move.setX(self.getX());
+            move.setY(self.getY() - (int) Math.signum(x));
+        }
+
+    }
+
+    private boolean isDamageable(World world, Trooper viewer, Trooper object) {
+        return world.isVisible(viewer.getShootingRange(), viewer.getX(), viewer.getY(), viewer.getStance(),
+                object.getX(), object.getY(), object.getStance());
     }
 
     private void shootTrooper(Trooper trooper, Move move) {
@@ -165,7 +185,6 @@ public final class MyStrategy implements Strategy {
 
     private void medicStrategy(Trooper self, World world, Move move) {
         // 2/3
-
         if (self.getHitpoints() < self.getMaximalHitpoints() - 3) {
             sout("heal self");
             move.setAction(ActionType.HEAL);
