@@ -97,10 +97,10 @@ public final class MyStrategy implements Strategy {
                 if (self.getActionPoints() > self.getShootCost()) {
                     shootTrooper(enemiesShooting.get(0), move);
                     trooperForAttackID = enemiesShooting.get(0).getId();
-                    return;
                 } else {
                     moveOut(self, enemiesShooting.get(0), move);
                 }
+                return;
             }
 
             if (self.getType() == TrooperType.COMMANDER) {
