@@ -20,6 +20,7 @@ public final class MyStrategy implements Strategy {
     List<Trooper> enemiesShooting = new ArrayList<Trooper>();
     List<Trooper> enemies = new ArrayList<Trooper>();
 
+
     @Override
     public void move(Trooper self, World world, Game game, Move move) {
         sout("=============================================================");
@@ -56,6 +57,26 @@ public final class MyStrategy implements Strategy {
 
             if (self.getActionPoints() < game.getStandingMoveCost()) {
                 return;
+            }
+
+            if (enemiesShooting.size() > 0) {
+                Trooper enemyGrenade = null;
+                for (Trooper trooper : enemiesShooting) {
+                    if (self.getDistanceTo(trooper) <= game.getGrenadeThrowRange()) {
+                        if (enemyGrenade == null) {
+                            enemyGrenade = trooper;
+                        } else if (enemyGrenade.getHitpoints() < trooper.getHitpoints()) {
+                            enemyGrenade = trooper;
+                        }
+                    }
+                }
+
+                if (enemyGrenade != null && self.isHoldingGrenade() && self.getActionPoints() >= game.getGrenadeThrowCost()) {
+                    move.setAction(ActionType.THROW_GRENADE);
+                    move.setX(enemyGrenade.getX());
+                    move.setY(enemyGrenade.getY());
+                    return;
+                }
             }
 
             if (self.isHoldingMedikit() && self.getHitpoints() < self.getMaximalHitpoints() / 3) {
